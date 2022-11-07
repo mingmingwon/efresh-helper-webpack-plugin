@@ -22,14 +22,14 @@ module.exports = {
   // ...
   configureWebpack: config => {
     // ...
-    process.argv.includes('build') && config.plugins.push(new RefreshHelperWebpackPlugin()) // limit in build mode
+    config.plugins.push(new RefreshHelperWebpackPlugin())
     // ...
   }
   // ...
 };
 ```
 
-Change the "pages", "message", "btnText" or "throttle" option if needed.
+Change the "pages", "message", "btnText" or "throttle" option if needed, see the default value in `Options` section.
 
 ```js
 const RefreshHelperWebpackPlugin = require('refresh-helper-webpack-plugin')
@@ -38,7 +38,7 @@ module.exports = {
   // ...
   configureWebpack: config => {
     // ...
-    process.argv.includes('build') && config.plugins.push(new RefreshHelperWebpackPlugin({
+    config.plugins.push(new RefreshHelperWebpackPlugin({
       pages: 'other.html', // String or Array
       message: '提示信息文本',
       btnText: '按钮文本',
@@ -53,8 +53,8 @@ module.exports = {
 # Options
 
 |Name|Type|Required|Default|Description|
-|:--:|:--:|:-----:|:-----:|:----------|
-|pages|String/Array|false|`all pages`|bundled html filename|
+|:--:|:--:|:-----:|:-----:|:----------:|
+|pages|String/Array|false|`all bundled pages`|bundled html filename|
 |message|String|false|发现新版本啦|new release message|
 |btnText|String|false|更新|refresh button text|
 |throttle|Number|false|60000|delay between requests|
