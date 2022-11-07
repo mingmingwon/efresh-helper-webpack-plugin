@@ -1,0 +1,36 @@
+{
+  "name": "refresh-helper-webpack-plugin",
+  "version": "0.1.0",
+  "description": "A webpack plugin that reminds the user of new release to refresh page",
+  "main": "lib/index.min.js",
+  "scripts": {
+    "babel": "babel src/index.js -o lib/index.js --compact --presets=@babel/preset-env",
+    "terser": "terser --compress --mangle -- lib/index.js > lib/index.min.js",
+    "build": "npm run babel && npm run terser"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "dayjs": "^1.11.6"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.19.6",
+    "@babel/preset-env": "^7.19.4",
+    "terser": "^5.15.1"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "keywords": [
+    "refresh helper"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mingmingwon/refresh-helper-webpack-plugin.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mingmingwon/refresh-helper-webpack-plugin/issues"
+  },
+  "homepage": "https://github.com/mingmingwon/refresh-helper-webpack-plugin#readme"
+}
