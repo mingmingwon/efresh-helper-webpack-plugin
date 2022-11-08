@@ -58,14 +58,18 @@ module.exports = class RefreshHelperWebpackPlugin {
     return `
       <script type="text/javascript" id="__refresh_script__">
         (function () {
+          var id = '__refresh_helper__';
+          function getRefresh () {
+            return document.querySelector('#' + id);
+          }
           function refreshHandler () {
             if (/(iPhone|iPad|iOS|Android)/i.test(navigator.userAgent)) {
               location.reload();
             } else {
-              var refresh = document.querySelector('#__refresh__');
+              var refresh = getRefresh();
               if (!refresh) {
                 refresh = document.createElement('div');
-                refresh.id = '__refresh__';
+                refresh.id = id;
                 refresh.style = 'position: fixed; z-index: 99999; background-color: #fff; right: 20px; bottom: 20px; text-align: center; box-shadow: rgba(0, 0, 0, .1) 0 2px 6px 1px; border-radius: 3px; padding: 10px 15px; font-size: 12px;';
                 var message = document.createElement('p');
                 message.innerHTML = '${this.config.message}';
@@ -113,7 +117,9 @@ module.exports = class RefreshHelperWebpackPlugin {
           })(xhr, ${this.config.throttle});
           document.addEventListener('visibilitychange', function () {
             if (document.visibilityState === 'visible') {
-              req = ajax();
+              if (!getRefresh()) {
+                req = ajax();
+              }
             } else {
               req && req.readyState !== 4 && req.abort();
             }
