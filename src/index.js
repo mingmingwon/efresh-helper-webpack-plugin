@@ -8,7 +8,7 @@ const errLog = (msg = 'error') => {
 }
 
 module.exports = class RefreshHelperWebpackPlugin {
-  constructor ({ pages = [], message = '发现新版本啦', btnText = '更新', throttle = 60000 } = {}) {
+  constructor ({ pages = [], message = '发现新版本啦', btnText = '更新', throttle = 60000, iframe = false } = {}) {
     const uPages = require(`${process.cwd()}/vue.config.js`).pages
     pages = Array.isArray(pages) ? pages : [pages]
     pages = pages.length ? pages : Object.keys(uPages).map(item => {
@@ -19,7 +19,8 @@ module.exports = class RefreshHelperWebpackPlugin {
       pages,
       message,
       btnText,
-      throttle
+      throttle,
+      iframe
     }
   }
 
@@ -64,6 +65,8 @@ module.exports = class RefreshHelperWebpackPlugin {
           }
           function refreshHandler () {
             if (/(iPhone|iPad|iOS|Android)/i.test(navigator.userAgent)) {
+              location.reload();
+            } else if (window !== window.parent && !${this.config.iframe}) {
               location.reload();
             } else {
               var refresh = getRefresh();

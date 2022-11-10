@@ -1,6 +1,6 @@
 {
   "name": "refresh-helper-webpack-plugin",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A webpack plugin that reminds the user of new release to refresh page",
   "main": "lib/index.min.js",
   "scripts": {
