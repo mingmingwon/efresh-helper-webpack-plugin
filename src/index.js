@@ -1,6 +1,7 @@
 const chalk = require('chalk')
 const dayjs = require('dayjs')
 const { readFileSync, writeFileSync } = require('fs')
+const { DefinePlugin } = require('webpack')
 
 const errLog = (msg = 'error') => {
   console.log(`\n${chalk.white.bgRed(' ERROR ')}${chalk.red(' [refresh-helper-webpack-plugin] ' + msg)}`)
@@ -25,9 +26,17 @@ module.exports = class RefreshHelperWebpackPlugin {
   }
 
   apply (compiler) {
+    const afterPlugins = () => {
+      const date = dayjs()
+      this.version = date.format('YYYY.MM.DD.HHmmss')
+      this.datetime = date.format('YYYY-MM-DD HH:mm:ss')
+      new DefinePlugin({
+        'process.env.VUE_APP_VERSION': JSON.stringify(this.version)
+      }).apply(compiler)
+    }
+
     const afterEmit = (compilation, callback) => {
-      this.version = compilation.hash
-      this.datetime = dayjs().format('YYYY-MM-DD HH:mm:ss')
+      this.hash = compilation.hash
       this.config.pages.forEach(item => {
         const page = compilation.assets[item]
         if (!page) {
@@ -35,13 +44,15 @@ module.exports = class RefreshHelperWebpackPlugin {
         }
         this.appendScript(page.existsAt)
       })
-      this.recordInfos(compilation.outputOptions.path)
+      this.recordRelease(compilation.outputOptions.path)
       callback()
     }
 
     if (compiler.hooks) {
-      compiler.hooks.afterEmit.tapAsync('afterEmit', afterEmit)
+      compiler.hooks.afterPlugins.tap('after-plugins', afterPlugins)
+      compiler.hooks.afterEmit.tapAsync('after-emit', afterEmit)
     } else {
+      compiler.plugin('after-plugins', afterPlugins)
       compiler.plugin('after-emit', afterEmit)
     }
   }
@@ -132,11 +143,12 @@ module.exports = class RefreshHelperWebpackPlugin {
     `.split(/[\r\n]/).map(line => line.trim()).join('')
   }
 
-  recordInfos (rootPath) {
+  recordRelease (distPath) {
     try {
-      writeFileSync(`${rootPath}/release.json`, JSON.stringify({
+      writeFileSync(`${distPath}/release.json`, JSON.stringify({
         version: this.version,
-        datetime: this.datetime
+        datetime: this.datetime,
+        hash: this.hash
       }, null, 2))
     } catch (err) {
       errLog(err)

@@ -7,7 +7,7 @@ A webpack plugin that reminds the user of new release to refresh page.
 # Features
 
 - Using `visibilitychange` API, see details at [MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/Page_Visibility_API) and its [compatibility](https://caniuse.com/?search=visibilitychange). It is more in line with our expectations.
-- Normal desktop pages will show refresh popup at right-bottom corner and fresh by clicking refresh button, iframe desktop pages have an `iframe` option to show refresh popup or refresh directly without any reminding. Mobile pages will refresh directly without any reminding. Pages visibility states embedded in iframe are the same as parent document.
+- Normal desktop pages will show refresh popup at right-bottom corner and fresh by clicking refresh button, iframe desktop pages have an `iframe` option to show refresh popup or refresh directly without any reminding by default. Mobile pages will refresh directly without any reminding. Pages visibility states embedded in iframe are the same as parent document.
 - When page becomes `hidden`, cancel request if it is not completed, do nothing if request is completed. When page becomes `visible`, throttle to avoid fetching interface frequently, do nothing if refresh popup exists already.
 - None dependency, none invasion, and simple compression.
 
@@ -57,6 +57,7 @@ module.exports = {
   // ...
 };
 ```
+In addition, an envrionment variable named `process.env.VUE_APP_VSERION` representing the current version has been injected.
 
 # Options
 
