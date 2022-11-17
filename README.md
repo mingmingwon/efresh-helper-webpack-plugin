@@ -20,7 +20,7 @@ npm i refresh-helper-webpack-plugin -D
 
 # Usage
 
-Modify your `vue.config.js` like below.
+Modify your `vue.config.js` like below limited in `build` script.
 
 ```js
 const RefreshHelperWebpackPlugin = require('refresh-helper-webpack-plugin')
@@ -29,7 +29,7 @@ module.exports = {
   // ...
   configureWebpack: config => {
     // ...
-    config.plugins.push(new RefreshHelperWebpackPlugin())
+    process.argv.includes('build') && config.plugins.push(new RefreshHelperWebpackPlugin())
     // ...
   }
   // ...
@@ -45,7 +45,7 @@ module.exports = {
   // ...
   configureWebpack: config => {
     // ...
-    config.plugins.push(new RefreshHelperWebpackPlugin({
+    process.argv.includes('build') && config.plugins.push(new RefreshHelperWebpackPlugin({
       pages: 'other.html', // String or Array
       message: '提示信息文本',
       btnText: '按钮文本',
