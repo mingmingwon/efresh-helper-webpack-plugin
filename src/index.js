@@ -10,7 +10,7 @@ const errLog = (msg = 'error') => {
 
 module.exports = class RefreshHelperWebpackPlugin {
   constructor ({ pages = [], message = '发现新版本啦', btnText = '更新', throttle = 60000, iframe = false } = {}) {
-    const uPages = require(`${process.cwd()}/vue.config.js`).pages
+    const uPages = require(`${process.cwd()}/vue.config.js`).pages || { index: 'public/index.html' }
     pages = Array.isArray(pages) ? pages : [pages]
     pages = pages.length ? pages : Object.keys(uPages).map(item => {
       const page = uPages[item]
